@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JDK 1.7 64Bit"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/javax.mail.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/selenium-java-2.40.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/apache-mime4j-0.6.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/bsh-1.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-codec-1.8.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-exec-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-io-2.2.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-jxpath-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/cssparser-0.9.11.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/guava-15.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/hamcrest-library-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/htmlunit-2.13.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/htmlunit-core-js-2.13.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/httpclient-4.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/httpcore-4.3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/httpmime-4.3.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/ini4j-0.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/jcommander-1.29.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/jetty-websocket-8.1.8.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/jna-3.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/jna-platform-3.4.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/json-20080701.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/junit-dep-4.11.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/nekohtml-1.9.19.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/netty-3.5.7.Final.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/operadriver-1.5.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/phantomjsdriver-1.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/protobuf-java-2.4.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/sac-1.3.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/testng-6.8.5.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/xercesImpl-2.10.0.jar"/>
+	<classpathentry kind="lib" path="C:/01_Development/Eclipse/workspace/ch.droptilllate.cloudprovider/lib/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
