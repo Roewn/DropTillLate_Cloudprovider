@@ -3,22 +3,23 @@
  */
 package ch.droptilllate.cloudprovider.dropbox;
 
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+
+import ch.droptilllate.cloudprovider.commons.Timer;
 import ch.droptilllate.cloudprovider.error.CloudError;
 import ch.droptilllate.cloudprovider.error.CloudException;
-
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
  * @author Rene Amrhein
@@ -31,9 +32,13 @@ public class HeadlessBrowserDB
 	private static String IDENTIFIER_LOGIN = "login_email";
 	private static String IDENTIFIER_PW = "login_password";
 	private static String IDENTIFIER_SHARE_FORM = "invite-more-form";
+	private static String IDENTIFIER_RESHARE_FORM = "//div[starts-with(@id,'folder-share-')]";
 	private static String IDENTIFIER_USER_LIST = "//form[@class='invite-more-form']//input[starts-with(@id,'invite-wizard-')][@type='text'][contains(@class,'new-collab-input')]";
 	private static String IDENTIFIER_MESSAGE = "custom-message-wizard";
 	private static String IDENTIFIER_SHARE_BUTTON = "//form[@class='invite-more-form']//input[contains(@class,'confirm-button')][@type='button']";
+
+	private static int WAIT_SHORT = 3;
+	private static int WAIT_MEDIUM = 5;
 
 	/**
 	 * Initiates the driver for the headlessBrowser
@@ -41,14 +46,13 @@ public class HeadlessBrowserDB
 	public HeadlessBrowserDB()
 	{
 		// TODO Remove firefox .. just for testing
-//		 webDriver = new FirefoxDriver();
-//		 webDriver = initiateChromeDriver();
+		// webDriver = new FirefoxDriver();
 
 		webDriver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
 		((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
 
 		// turn off htmlunit warnings
-		java.util.logging.Logger.getLogger("com.gargoylesoftware").setLevel(java.util.logging.Level.OFF);
+		Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
 	}
 
 	/**
@@ -89,11 +93,11 @@ public class HeadlessBrowserDB
 			}
 			pw.submit();
 
-			WebDriverWait wait = new WebDriverWait(webDriver, 2);
+			WebDriverWait wait = new WebDriverWait(webDriver, WAIT_SHORT);
 			try
 			{
 				wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(IDENTIFIER_LOGIN)));
-				//
+
 			} catch (Exception e)
 			{
 				throw new CloudException(CloudError.INVALID_ACCOUNT, "Invalid account information for: " + cloundUser);
@@ -116,26 +120,41 @@ public class HeadlessBrowserDB
 	 */
 	public boolean isFolderOnDB(String droptilllatePath, int shareRelationID) throws CloudException
 	{
-		String url = ConstantsDB.BASIC_URL + "/" + droptilllatePath;
-		webDriver.get(url);
+		String url = ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID;
 
-		// TODO does not work propperly with headless browser
-		
-		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		WebDriverWait wait = new WebDriverWait(webDriver, WAIT_MEDIUM);
+
+		webDriver.get(url + ConstantsDB.URL_SHARE_PARAMS);
+		// wait for the share dialog to open
 		try
 		{
-			// wait.until(ExpectedConditions.titleContains(Integer.toString(shareRelationID)));
-			// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@data-fq_path," + shareRelationID + ")]")));
-
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[contains(@href," + shareRelationID + ")]")));
-		} catch (Exception e)
-		{
-			throw new CloudException(CloudError.FOLDER_NOT_FOUND, url + "/" + shareRelationID);
+			// test if the share dialog can be opened ...
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(IDENTIFIER_SHARE_FORM)));
+			// if this can be done, folder is on dropbox
+			System.out.println("Folder " + shareRelationID + " exists on dropbox");
+			return true;
+		} catch (Exception e1)
+		{	
+			//TODO remove in case of already shared check
+			throw new CloudException(CloudError.FOLDER_NOT_FOUND, url);
 		}
 
-		System.out.println("Folder " + shareRelationID + " exists on dropbox");
-		return true;
+		// TODO if folder is already shared, this can not be detected! shoud be used
+		
+		// ... if not, check if the folder is already shared
+//		webDriver.get(url + ConstantsDB.URL_RESHARE_PARMS);
+//		try
+//		{
+//			// throw a exception if the folder is not already shared
+//			wait.until(ExpectedConditions.presenceOfElementLocated(By.className("member-info")));
+//			// if no exception occurred, the folder exists but is already shared
+//			throw new CloudException(CloudError.FOLDER_ALREADY_SHARED, url);
+//		} catch (Exception e2)
+//		{
+//			throw new CloudException(CloudError.FOLDER_NOT_FOUND, url);
+//		}
 	}
+	
 
 	/**
 	 * Shares the folder of the passed share Relation with the users specified in the userEmailList. *
@@ -148,17 +167,17 @@ public class HeadlessBrowserDB
 	 */
 	public void shareFolder(String droptilllatePath, int shareRelationID, String shareEmails) throws CloudException
 	{
-		String url = ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_PARAMS;
+		String url = ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_SHARE_PARAMS;
 		webDriver.get(url);
 		// wait for the share dialog to open
-		WebDriverWait wait = new WebDriverWait(webDriver, 10);
+		WebDriverWait wait = new WebDriverWait(webDriver, WAIT_SHORT);
 		try
 		{
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(IDENTIFIER_SHARE_FORM)));
-//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//form[@class='invite-more-form']")));
+			// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//form[@class='invite-more-form']")));
 		} catch (Exception e)
 		{
-			throw new CloudException(CloudError.WEBERROR_SHAREDIALOG, "Folder already shared or share dialog could no be identified");
+			throw new CloudException(CloudError.WEBERROR_SHAREDIALOG, "Share dialog could not be identified\n" + url);
 		}
 
 		// get and fill user list
@@ -189,8 +208,8 @@ public class HeadlessBrowserDB
 		try
 		{
 			WebElement submitButton = webDriver.findElement(By.xpath(IDENTIFIER_SHARE_BUTTON));
-			submitButton.click(); 
-//			submitButton.submit();
+			submitButton.click();
+			// submitButton.submit();
 			System.out.println("folder " + shareRelationID + " shared");
 		} catch (Exception e)
 		{
@@ -211,20 +230,5 @@ public class HeadlessBrowserDB
 		{
 			System.out.println("Info when quitting WebDriver: " + e.getMessage());
 		}
-	}
-
-	private ChromeDriver initiateChromeDriver() {
-		DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome();
-
-		String chromeBinary = System.getProperty(" ");
-		if (chromeBinary == null || chromeBinary.equals("")) {
-		    String os = System.getProperty("os.name").toLowerCase().substring(0, 3);
-		    chromeBinary = "lib/chromedriver-" + os + (os.equals("win") ? ".exe" : "");
-		    System.setProperty("webdriver.chrome.driver", chromeBinary);
-		}
-		
-		chromeCapabilities.setCapability("chrome.binary", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
-
-		return new ChromeDriver(chromeCapabilities);
 	}
 }

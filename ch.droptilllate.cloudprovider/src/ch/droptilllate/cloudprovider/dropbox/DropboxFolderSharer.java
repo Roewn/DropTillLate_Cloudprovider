@@ -23,7 +23,7 @@ public class DropboxFolderSharer
 {
 	private final static String BASIC_URL = "https://www.dropbox.com/home";
 	private final static String URL_PARAMS = "?share=1";
-	// private final static String URL_PARAMS = "";
+	// private final static String URL_SHARE_PARAMS = "";
 	private final static String USER_LIMITER = ";";
 
 	public static void shareFolder(String shareRelation)

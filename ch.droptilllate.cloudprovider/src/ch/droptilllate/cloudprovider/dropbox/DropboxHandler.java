@@ -7,9 +7,11 @@ import java.util.List;
 
 import ch.droptilllate.cloudprovider.api.ICloudProvider;
 import ch.droptilllate.cloudprovider.commons.ShareHelper;
+import ch.droptilllate.cloudprovider.commons.Timer;
 import ch.droptilllate.cloudprovider.commons.WebHelper;
 import ch.droptilllate.cloudprovider.error.CloudError;
 import ch.droptilllate.cloudprovider.error.CloudException;
+import ch.droptilllate.cloudprovider.preferences.Constants;
 
 /**
  * This class handles the sharing of a folder in a specific Dropbox account.
@@ -19,11 +21,67 @@ import ch.droptilllate.cloudprovider.error.CloudException;
  */
 public class DropboxHandler implements ICloudProvider
 {
+	// TODO quit browser when object gets disposed
 	private HeadlessBrowserDB browser;
 
 	public DropboxHandler()
 	{
 		browser = new HeadlessBrowserDB();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#testCloudAccount(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public CloudError testCloudAccount(String cloundUser, String cloundPW)
+	{
+		printStartToConsole("Test Dropbox account (username, password)");
+		Timer.start();
+		try
+		{
+			// Test the internet connection and return an error if there is a problem
+			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+			// Try to login into the account
+			browser.loginAccount(cloundUser, cloundPW);
+		} catch (CloudException e)
+		{
+			System.err.println(e.getError());
+			return e.getError();
+		}
+		Timer.stop(true);
+		return CloudError.NONE;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#checkIfFolderExists(java.lang.String, int, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public CloudError checkIfFolderExists(String droptilllatePath, int shareRelationID, String cloundUser, String cloundPW)
+	{
+		// TODO test tillate path
+		printStartToConsole("Check if folder '" + droptilllatePath + "/" + shareRelationID + "' exists on Dropbox");
+		Timer.start();
+		try
+		{
+			// Test the internet connection and return an error if there is a problem
+			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+			// Try to login into the account
+			browser.loginAccount(cloundUser, cloundPW);
+			// see if the folder exists
+			browser.isFolderOnDB(droptilllatePath, shareRelationID);
+
+		} catch (CloudException e)
+		{
+			System.err.println(e.getError());
+			browser.quit();
+			return e.getError();
+		}
+		Timer.stop(true);
+		return CloudError.NONE;
 	}
 
 	/*
@@ -36,33 +94,27 @@ public class DropboxHandler implements ICloudProvider
 	public CloudError shareFolder(String droptilllatePath, int shareRelationID, String cloundUser, String cloundPW,
 			List<String> shareEmailList)
 	{
-		printStartToConsole("Share cloud Folder: " + shareRelationID);
-		CloudError error = CloudError.NONE;
+		printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' via Dropbox");
 		String shareEmails = null;
-
-		// check internet connection, login account and check if the folder exists
-//		 error = checkIfFolderExists(droptilllatePath, shareRelationID, cloundUser, cloundPW);
-		// TODO see if the folder check works and than change back to folder check
-		error = testCloudAccount(cloundUser, cloundPW);
-
-		// if no error occured procced ...
-		if (error == CloudError.NONE)
+		Timer.start();
+		try
 		{
-			try
-			{
+			// Test the internet connection and return an error if there is a problem
+			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+			// Try to login into the account
+			browser.loginAccount(cloundUser, cloundPW);
+			// see if the folder exists
+			browser.isFolderOnDB(droptilllatePath, shareRelationID);
+			// check if the passed email addresses are in a valid format and build the email list in the valid format
+			shareEmails = buildValidMailList(shareEmailList);
+			// share the folder to the passed users
+			browser.shareFolder(droptilllatePath, shareRelationID, shareEmails);
 
-				// check if the passed email addresses are in a valid format and build the email list in the valid format
-				shareEmails = buildValidMailList(shareEmailList);
-
-				// share to folder to the passed users
-				browser.shareFolder(droptilllatePath, shareRelationID, shareEmails);
-
-			} catch (CloudException e)
-			{
-				System.err.println(e.getError());
-				browser.quit();
-				return e.getError();
-			}
+		} catch (CloudException e)
+		{
+			System.err.println(e.getError());
+			browser.quit();
+			return e.getError();
 		}
 
 		// TODO better delay handling
@@ -71,65 +123,48 @@ public class DropboxHandler implements ICloudProvider
 			Thread.sleep(2000);
 		} catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		browser.quit();
-		return error;
+		Timer.stop(true);
+		return CloudError.NONE;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#testCloudAccount(java.lang.String, java.lang.String)
+	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#shareFolderManuallyViaBrowser(java.lang.String, java.lang.String, boolean)
 	 */
 	@Override
-	public CloudError testCloudAccount(String cloundUser, String cloundPW)
+	public CloudError shareFolderManuallyViaBrowser(String droptilllatePath, int shareRelationID, boolean alreadyShared)
 	{
-		printStartToConsole("Test cloud account");
-		CloudError error = CloudError.NONE;
+		printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' manually via default browser");
+		Timer.start();
 		try
 		{
 			// Test the internet connection and return an error if there is a problem
 			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
-			// Try to login into the account
-			browser.loginAccount(cloundUser, cloundPW);
+			if (alreadyShared)
+			{
+				// open the dropbox website via default browser for not yet shared folder
+				WebHelper
+						.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_RESHARE_PARMS);
+
+			} else
+			{
+				// open the dropbox website via default browser for not yet shared folder
+				WebHelper
+						.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_SHARE_PARAMS);
+			}
+
 		} catch (CloudException e)
 		{
 			System.err.println(e.getError());
 			return e.getError();
 		}
 
-		return error;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#checkIfFolderExists(java.lang.String, int, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public CloudError checkIfFolderExists(String droptilllatePath, int shareRelationID, String cloundUser, String cloundPW)
-	{
-		// TODO test tillate path
-		printStartToConsole("Check if folder is synchronized on cloud");
-		CloudError error = CloudError.NONE;
-		error = testCloudAccount(cloundUser, cloundPW);
-		if (error == CloudError.NONE)
-		{
-			try
-			{
-				// see if the folder exists
-				browser.isFolderOnDB(droptilllatePath, shareRelationID);
-
-			} catch (CloudException e)
-			{
-				System.err.println(e.getError());
-				return e.getError();
-			}
-		}
-		return error;
+		Timer.stop(true);
+		return CloudError.NONE;
 	}
 
 	/**
@@ -166,7 +201,7 @@ public class DropboxHandler implements ICloudProvider
 	private void printStartToConsole(String methode)
 	{
 
-		System.out.println(ConstantsDB.CONSOLE_LIMITER);
+		System.out.println(Constants.CONSOLE_LIMITER);
 		System.out.println(methode);
 	}
 

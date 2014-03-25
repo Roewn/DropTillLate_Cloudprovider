@@ -19,7 +19,8 @@ public enum CloudError
 	
 	INVALID_EMAIL("The passed email is not in a valid format"),
 	
-	FOLDER_NOT_FOUND("Share-Folder could not be found on cloud"),
+	FOLDER_NOT_FOUND("Share-Folder could not be found on cloud service"),
+	FOLDER_ALREADY_SHARED("Share-Folder exits, but is already shared"),
 	
 	WEBERROR_SHAREDIALOG("Share dialog could not be opened"),	
 	WEBERROR_USERLIST("Userlist web element could not be fetched from current page"),
@@ -30,7 +31,7 @@ public enum CloudError
 	
 	
 	private String error;
-	private String message;
+	private String message = "no message attached";
 
 
 	private CloudError(String error) {
