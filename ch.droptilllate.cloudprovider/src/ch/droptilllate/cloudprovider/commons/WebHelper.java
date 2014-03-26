@@ -30,7 +30,7 @@ public class WebHelper
 	 */
 	public static boolean pingURL(String url, int timeout) throws CloudException
 	{
-		System.out.println("Checking internet connetion: " + url);
+		System.out.println("Checking internet connection: " + url);
 		url = url.replaceFirst("https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
 		try
 		{

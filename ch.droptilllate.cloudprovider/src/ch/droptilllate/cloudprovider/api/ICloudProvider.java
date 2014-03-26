@@ -48,9 +48,10 @@ public interface ICloudProvider
 	 * @param cloudUser Username for the could login
 	 * @param cloundPW Password for the cloud login
 	 * @param shareEmailList List of email addresses for all users the share relations has to be shared with.
+	 * @param alreadyShared this indicates if the passed folder indentified by the shareRelationID is already shared to other users (true = already shared).
 	 * @return In Case of an Error, a CloudError gets returned describing the problem. If no error occurred, CloudError.NONE gets returned.
 	 */
-	CloudError shareFolder(String droptilllatePath, int shareRelationID, String cloudUser, String cloundPW, List<String> shareEmailList);
+	CloudError shareFolder(String droptilllatePath, int shareRelationID, String cloudUser, String cloundPW, List<String> shareEmailList, boolean alreadyShared);
 	
 	/**
 	 * This method can be use in case the "shareFolder" method didn't work, it opens the default webbrowser and navigates to the cloud providers page 
