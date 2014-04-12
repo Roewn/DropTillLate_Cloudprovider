@@ -19,18 +19,23 @@ public class SimpleTest
 		CloudError error = CloudError.NONE;
 
 		List<String> userList = new ArrayList<String>();
-		userList.add("wurst@hotmail.com");
-		userList.add("homo@gay.ch");
+		userList.add("wudfst@hotmail.com");
+		userList.add("hodfo@gay.ch");
+		
+		boolean alreadyShared = true;
 
-		error = dropbox.checkIfFolderExists(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW);
+		if (!alreadyShared)
+		{
+			error = dropbox.checkIfFolderExists(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW);
+		}
 		if (error == CloudError.NONE)
 		{
-			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList);
+			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList, alreadyShared);
 		}
-//		
-//		error = dropbox.shareFolderManuallyViaBrowser(DROPTILLLATE_PATH, SHARERELATION_ID, true);
-		
-//		dropbox.testCloudAccount(USER, PW);
-		
+
+		// error = dropbox.shareFolderManuallyViaBrowser(DROPTILLLATE_PATH, SHARERELATION_ID, true);
+
+		// dropbox.testCloudAccount(USER, PW);
+
 	}
 }

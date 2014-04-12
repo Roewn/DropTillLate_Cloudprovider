@@ -88,27 +88,33 @@ public class DropboxHandler implements ICloudProvider
 	 * (non-Javadoc)
 	 * 
 	 * @see ch.droptilllate.cloudprovider.api.ICloudProvider#shareFolder(java.lang.String, int, java.lang.String, java.lang.String,
-	 * java.util.List)
+	 * java.util.List, boolean)
 	 */
 	@Override
 	public CloudError shareFolder(String droptilllatePath, int shareRelationID, String cloundUser, String cloundPW,
-			List<String> shareEmailList)
+			List<String> shareEmailList, boolean alreadyShared)
 	{
-		printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' via Dropbox");
+		printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' via Dropbox [alreadyShared = "
+				+ alreadyShared + "]");
 		String shareEmails = null;
 		Timer.start();
 		try
 		{
 			// Test the internet connection and return an error if there is a problem
 			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+
 			// Try to login into the account
 			browser.loginAccount(cloundUser, cloundPW);
 			// see if the folder exists
 //			browser.isFolderOnDB(droptilllatePath, shareRelationID);
+
 			// check if the passed email addresses are in a valid format and build the email list in the valid format
 			shareEmails = buildValidMailList(shareEmailList);
+			// Try to login into the account
+			browser.loginAccount(cloundUser, cloundPW);
+
 			// share the folder to the passed users
-			browser.shareFolder(droptilllatePath, shareRelationID, shareEmails);
+			browser.shareFolder(droptilllatePath, shareRelationID, shareEmails, alreadyShared);
 
 		} catch (CloudException e)
 		{
@@ -147,8 +153,8 @@ public class DropboxHandler implements ICloudProvider
 			if (alreadyShared)
 			{
 				// open the dropbox website via default browser for not yet shared folder
-				WebHelper
-						.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_RESHARE_PARMS);
+				WebHelper.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID
+						+ ConstantsDB.URL_RESHARE_PARMS);
 
 			} else
 			{
