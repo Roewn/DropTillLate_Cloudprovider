@@ -3,11 +3,9 @@ package ch.droptilllate.cloudprovider.commons;
 import java.awt.Desktop;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.UnknownHostException;
 
 import ch.droptilllate.cloudprovider.error.CloudError;
 import ch.droptilllate.cloudprovider.error.CloudException;
@@ -30,7 +28,7 @@ public class WebHelper
 	 */
 	public static boolean pingURL(String url, int timeout) throws CloudException
 	{
-		System.out.println("Checking internet connetion: " + url);
+		System.out.println("Checking internet connection: " + url);
 		url = url.replaceFirst("https", "http"); // Otherwise an exception may be thrown on invalid SSL certificates.
 		try
 		{

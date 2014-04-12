@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Cloudprovider
 Bundle-SymbolicName: ch.droptilllate.cloudprovider
-Bundle-Version: 0.4.1
+Bundle-Version: 0.5.0
 Bundle-ClassPath: cloudprovider.jar,
  lib/apache-mime4j-0.6.jar,
  lib/bsh-1.3.0.jar,
@@ -354,7 +354,6 @@ Export-Package: bsh,
  org.apache.xalan.processor,
  org.apache.xalan.res,
  org.apache.xalan.serialize,
- org.apache.xalan.templates,
  org.apache.xalan.trace,
  org.apache.xalan.transformer,
  org.apache.xalan.xslt,
@@ -585,5 +584,5 @@ Export-Package: bsh,
  org.xml.sax,
  org.xml.sax.ext,
  org.xml.sax.helpers,
- templates,
  trax
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -6,7 +6,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -50,7 +49,7 @@ public class DropboxFolderSharer
 		// DesiredCapabilities caps = DesiredCapabilities.htmlUnitWithJs();
 		// caps.setBrowserName("firefox");
 
-		 WebDriver webDriver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+		 WebDriver webDriver = new HtmlUnitDriver(BrowserVersion.FIREFOX_24);
 		 ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
 //		WebDriver webDriver = new FirefoxDriver();
 

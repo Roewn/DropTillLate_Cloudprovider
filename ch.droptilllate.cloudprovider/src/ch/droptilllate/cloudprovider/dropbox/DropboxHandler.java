@@ -104,7 +104,7 @@ public class DropboxHandler implements ICloudProvider
 			// Try to login into the account
 			browser.loginAccount(cloundUser, cloundPW);
 			// see if the folder exists
-			browser.isFolderOnDB(droptilllatePath, shareRelationID);
+//			browser.isFolderOnDB(droptilllatePath, shareRelationID);
 			// check if the passed email addresses are in a valid format and build the email list in the valid format
 			shareEmails = buildValidMailList(shareEmailList);
 			// share the folder to the passed users
@@ -184,7 +184,7 @@ public class DropboxHandler implements ICloudProvider
 	 */
 	private String buildValidMailList(List<String> shareEmailList) throws CloudException
 	{
-		System.out.println("Checking passed email addresses");
+		System.out.println("building email list ...");
 		StringBuilder sbEmailList = new StringBuilder();
 		for (String email : shareEmailList)
 		{

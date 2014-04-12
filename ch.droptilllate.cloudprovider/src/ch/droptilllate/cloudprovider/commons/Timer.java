@@ -1,7 +1,5 @@
 package ch.droptilllate.cloudprovider.commons;
 
-import java.util.Date;
-
 import ch.droptilllate.cloudprovider.preferences.Constants;
 
 public class Timer

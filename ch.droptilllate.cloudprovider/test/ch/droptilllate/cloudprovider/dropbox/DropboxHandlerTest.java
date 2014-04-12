@@ -1,10 +1,9 @@
 package ch.droptilllate.cloudprovider.dropbox;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Test;
-import org.testng.annotations.AfterTest;
 
 import ch.droptilllate.cloudprovider.error.CloudError;
 

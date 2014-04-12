@@ -3,21 +3,16 @@
  */
 package ch.droptilllate.cloudprovider.dropbox;
 
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
-import ch.droptilllate.cloudprovider.commons.Timer;
 import ch.droptilllate.cloudprovider.error.CloudError;
 import ch.droptilllate.cloudprovider.error.CloudException;
 
@@ -32,13 +27,13 @@ public class HeadlessBrowserDB
 	private static String IDENTIFIER_LOGIN = "login_email";
 	private static String IDENTIFIER_PW = "login_password";
 	private static String IDENTIFIER_SHARE_FORM = "invite-more-form";
-	private static String IDENTIFIER_RESHARE_FORM = "//div[starts-with(@id,'folder-share-')]";
+//	private static String IDENTIFIER_RESHARE_FORM = "//div[starts-with(@id,'folder-share-')]";
 	private static String IDENTIFIER_USER_LIST = "//form[@class='invite-more-form']//input[starts-with(@id,'invite-wizard-')][@type='text'][contains(@class,'new-collab-input')]";
 	private static String IDENTIFIER_MESSAGE = "custom-message-wizard";
 	private static String IDENTIFIER_SHARE_BUTTON = "//form[@class='invite-more-form']//input[contains(@class,'confirm-button')][@type='button']";
 
 	private static int WAIT_SHORT = 3;
-	private static int WAIT_MEDIUM = 5;
+	private static int WAIT_MEDIUM = 8;
 
 	/**
 	 * Initiates the driver for the headlessBrowser
@@ -46,9 +41,9 @@ public class HeadlessBrowserDB
 	public HeadlessBrowserDB()
 	{
 		// TODO Remove firefox .. just for testing
-		// webDriver = new FirefoxDriver();
-
-		webDriver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+//		 webDriver = new FirefoxDriver();
+		
+		webDriver = new HtmlUnitDriver();
 		((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
 
 		// turn off htmlunit warnings
@@ -141,18 +136,6 @@ public class HeadlessBrowserDB
 
 		// TODO if folder is already shared, this can not be detected! shoud be used
 		
-		// ... if not, check if the folder is already shared
-//		webDriver.get(url + ConstantsDB.URL_RESHARE_PARMS);
-//		try
-//		{
-//			// throw a exception if the folder is not already shared
-//			wait.until(ExpectedConditions.presenceOfElementLocated(By.className("member-info")));
-//			// if no exception occurred, the folder exists but is already shared
-//			throw new CloudException(CloudError.FOLDER_ALREADY_SHARED, url);
-//		} catch (Exception e2)
-//		{
-//			throw new CloudException(CloudError.FOLDER_NOT_FOUND, url);
-//		}
 	}
 	
 
@@ -168,9 +151,12 @@ public class HeadlessBrowserDB
 	public void shareFolder(String droptilllatePath, int shareRelationID, String shareEmails) throws CloudException
 	{
 		String url = ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_SHARE_PARAMS;
+		
+		WebDriverWait wait = new WebDriverWait(webDriver, WAIT_MEDIUM);
+		
 		webDriver.get(url);
 		// wait for the share dialog to open
-		WebDriverWait wait = new WebDriverWait(webDriver, WAIT_SHORT);
+		
 		try
 		{
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(IDENTIFIER_SHARE_FORM)));
@@ -225,6 +211,7 @@ public class HeadlessBrowserDB
 	{
 		try
 		{
+//			((HtmlUnitDriver) webDriver).manage().deleteAllCookies();
 			webDriver.quit();
 		} catch (Exception e)
 		{

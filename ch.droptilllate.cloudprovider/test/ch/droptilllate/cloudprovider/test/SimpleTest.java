@@ -3,7 +3,6 @@ package ch.droptilllate.cloudprovider.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.droptilllate.cloudprovider.api.ICloudProvider;
 import ch.droptilllate.cloudprovider.dropbox.DropboxHandler;
 import ch.droptilllate.cloudprovider.error.CloudError;
 
@@ -23,15 +22,15 @@ public class SimpleTest
 		userList.add("wurst@hotmail.com");
 		userList.add("homo@gay.ch");
 
-//		error = dropbox.checkIfFolderExists(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW);
-//		if (error == CloudError.NONE)
-//		{
-//			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList);
-//		}
+		error = dropbox.checkIfFolderExists(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW);
+		if (error == CloudError.NONE)
+		{
+			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList);
+		}
 //		
 //		error = dropbox.shareFolderManuallyViaBrowser(DROPTILLLATE_PATH, SHARERELATION_ID, true);
 		
-		dropbox.testCloudAccount(USER, PW);
+//		dropbox.testCloudAccount(USER, PW);
 		
 	}
 }
