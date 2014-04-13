@@ -49,7 +49,7 @@ public class DropboxFolderSharer
 		// DesiredCapabilities caps = DesiredCapabilities.htmlUnitWithJs();
 		// caps.setBrowserName("firefox");
 
-		 WebDriver webDriver = new HtmlUnitDriver(BrowserVersion.FIREFOX_24);
+		 WebDriver webDriver = new HtmlUnitDriver();
 		 ((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
 //		WebDriver webDriver = new FirefoxDriver();
 
