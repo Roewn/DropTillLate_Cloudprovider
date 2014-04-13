@@ -66,8 +66,11 @@ public class HeadlessBrowserDB
 		if (!currentURL.equals(ConstantsDB.BASIC_URL))
 		{
 			System.out.println("Login dropbox account");
+			WebDriverWait wait1 = new WebDriverWait(webDriver, WAIT_MEDIUM);
 			try
 			{
+				wait1.until(ExpectedConditions.visibilityOfElementLocated(By.id(IDENTIFIER_LOGIN)));
+			
 				WebElement login = webDriver.findElement(By.id(IDENTIFIER_LOGIN));
 				login.sendKeys(cloundUser);
 			} catch (Exception e)
