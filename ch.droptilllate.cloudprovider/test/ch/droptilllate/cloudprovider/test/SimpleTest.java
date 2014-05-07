@@ -24,11 +24,11 @@ public class SimpleTest
 		userList.add("homo@gay.ch");
 
 		error = dropbox.checkIfFolderExists(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW);
-//		if (error == CloudError.NONE)
-//		{
-//			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList);
-//		}
-//		
+		if (error == CloudError.NONE)
+		{
+			error = dropbox.shareFolder(DROPTILLLATE_PATH, SHARERELATION_ID, USER, PW, userList);
+		}
+		
 //		error = dropbox.shareFolderManuallyViaBrowser(DROPTILLLATE_PATH, SHARERELATION_ID, true);
 		
 //		dropbox.testCloudAccount(USER, PW);

@@ -12,8 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import ch.droptilllate.cloudprovider.commons.WebHelper;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-
 /**
  * @author Roewn
  * 
