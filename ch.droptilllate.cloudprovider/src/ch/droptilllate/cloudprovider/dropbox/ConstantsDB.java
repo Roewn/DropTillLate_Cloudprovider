@@ -21,7 +21,8 @@ public final class ConstantsDB
 	// *****************************************************************************
 	// Share
 	// *****************************************************************************
-	public static final String SHARE_MESSAGE = "You recieved a share invitation for a DropTillLate folder.\n";
+	public static final String SHARE_MESSAGE = "You recieved a share invitation for a DropTillLate folder.\n"
+			+ "Instructions how to import shared files can be found here: http://droptilllate.ch/?page_id=17";
 
 	
 }

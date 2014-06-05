@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -24,9 +25,11 @@ public class HeadlessBrowserDB
 {
 	private WebDriver webDriver;
 
-	private static String IDENTIFIER_LOGIN = "login_email";
-	private static String IDENTIFIER_PW = "login_password";
-	private static String IDENTIFIER_SHARE_FORM = "invite-more-form";
+	//private static String IDENTIFIER_LOGIN = "login_email";
+	//private static String IDENTIFIER_PW = "login_password";
+	private static String IDENTIFIER_LOGIN = "//input[@type='email'][@name='login_email']";	
+	private static String IDENTIFIER_PW = "//input[@type='password'][@name='login_password']";
+	private static String IDENTIFIER_SHARE_FORM = "//form[@class='invite-more-form']";
 //	private static String IDENTIFIER_RESHARE_FORM = "//div[starts-with(@id,'folder-share-')]";
 	private static String IDENTIFIER_USER_LIST = "//form[@class='invite-more-form']//input[starts-with(@id,'invite-wizard-')][@type='text'][contains(@class,'new-collab-input')]";
 	private static String IDENTIFIER_MESSAGE = "custom-message-wizard";
@@ -34,6 +37,7 @@ public class HeadlessBrowserDB
 
 	private static int WAIT_SHORT = 3;
 	private static int WAIT_MEDIUM = 8;
+	private static int WAIT_LONG = 12;
 
 	/**
 	 * Initiates the driver for the headlessBrowser
@@ -41,10 +45,10 @@ public class HeadlessBrowserDB
 	public HeadlessBrowserDB()
 	{
 		// TODO Remove firefox .. just for testing
-//		 webDriver = new FirefoxDriver();
+		 webDriver = new FirefoxDriver();
 		
-		webDriver = new HtmlUnitDriver();
-		((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
+//		webDriver = new HtmlUnitDriver();
+//		((HtmlUnitDriver) webDriver).setJavascriptEnabled(true);
 
 		// turn off htmlunit warnings
 		Logger.getLogger("com.gargoylesoftware").setLevel(Level.OFF);
@@ -69,9 +73,12 @@ public class HeadlessBrowserDB
 			WebDriverWait wait1 = new WebDriverWait(webDriver, WAIT_MEDIUM);
 			try
 			{
-				wait1.until(ExpectedConditions.visibilityOfElementLocated(By.id(IDENTIFIER_LOGIN)));
-			
-				WebElement login = webDriver.findElement(By.id(IDENTIFIER_LOGIN));
+				//wait1.until(ExpectedConditions.visibilityOfElementLocated(By.name(IDENTIFIER_LOGIN)));
+				//WebElement login = webDriver.findElement(By.name(IDENTIFIER_LOGIN));
+				
+				wait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(IDENTIFIER_LOGIN)));
+				WebElement login = webDriver.findElement(By.xpath(IDENTIFIER_LOGIN));
+				
 				login.sendKeys(cloundUser);
 			} catch (Exception e)
 			{
@@ -82,7 +89,8 @@ public class HeadlessBrowserDB
 			WebElement pw;
 			try
 			{
-				pw = webDriver.findElement(By.id(IDENTIFIER_PW));
+				//pw = webDriver.findElement(By.name(IDENTIFIER_PW));
+				pw = webDriver.findElement(By.xpath(IDENTIFIER_PW));
 				pw.sendKeys(cloundPW);
 			} catch (Exception e)
 			{
@@ -94,7 +102,8 @@ public class HeadlessBrowserDB
 			WebDriverWait wait = new WebDriverWait(webDriver, WAIT_SHORT);
 			try
 			{
-				wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(IDENTIFIER_LOGIN)));
+				//wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(IDENTIFIER_LOGIN)));
+				wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(IDENTIFIER_LOGIN)));
 
 			} catch (Exception e)
 			{
@@ -127,7 +136,7 @@ public class HeadlessBrowserDB
 		try
 		{
 			// test if the share dialog can be opened ...
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(IDENTIFIER_SHARE_FORM)));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(IDENTIFIER_SHARE_FORM)));
 			// if this can be done, folder is on dropbox
 			System.out.println("Folder " + shareRelationID + " exists on dropbox");
 			return true;
@@ -162,7 +171,7 @@ public class HeadlessBrowserDB
 		
 		try
 		{
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(IDENTIFIER_SHARE_FORM)));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(IDENTIFIER_SHARE_FORM)));
 			// wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//form[@class='invite-more-form']")));
 		} catch (Exception e)
 		{

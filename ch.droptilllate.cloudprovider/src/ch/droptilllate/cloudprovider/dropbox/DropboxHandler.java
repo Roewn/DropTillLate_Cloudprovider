@@ -37,20 +37,27 @@ public class DropboxHandler implements ICloudProvider
 	@Override
 	public CloudError testCloudAccount(String cloundUser, String cloundPW)
 	{
-		printStartToConsole("Test Dropbox account (username, password)");
-		Timer.start();
 		try
 		{
-			// Test the internet connection and return an error if there is a problem
-			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
-			// Try to login into the account
-			browser.loginAccount(cloundUser, cloundPW);
-		} catch (CloudException e)
+			printStartToConsole("Test Dropbox account (username, password)");
+			Timer.start();
+			try
+			{
+				// Test the internet connection and return an error if there is a problem
+				WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+				// Try to login into the account
+				browser.loginAccount(cloundUser, cloundPW);
+			} catch (CloudException e)
+			{
+				System.err.println(e.getError());
+				return e.getError();
+			}
+			Timer.stop(true);
+			// TODO Remove when using headless mode
+			browser.quit();
+		} catch (Exception e)
 		{
-			System.err.println(e.getError());
-			return e.getError();
 		}
-		Timer.stop(true);
 		return CloudError.NONE;
 	}
 
@@ -94,38 +101,42 @@ public class DropboxHandler implements ICloudProvider
 	public CloudError shareFolder(String droptilllatePath, int shareRelationID, String cloundUser, String cloundPW,
 			List<String> shareEmailList)
 	{
-		printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' via Dropbox");
-		String shareEmails = null;
-		Timer.start();
 		try
 		{
-			// Test the internet connection and return an error if there is a problem
-			WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
-			// Try to login into the account
-			browser.loginAccount(cloundUser, cloundPW);
-			// see if the folder exists
-//			browser.isFolderOnDB(droptilllatePath, shareRelationID);
-			// check if the passed email addresses are in a valid format and build the email list in the valid format
-			shareEmails = buildValidMailList(shareEmailList);
-			// share the folder to the passed users
-			browser.shareFolder(droptilllatePath, shareRelationID, shareEmails);
+			printStartToConsole("Share folder: '" + droptilllatePath + "/" + shareRelationID + "' via Dropbox");
+			String shareEmails = null;
+			Timer.start();
+			try
+			{
+				// Test the internet connection and return an error if there is a problem
+				WebHelper.pingURL(ConstantsDB.BASIC_URL, 20000);
+				// Try to login into the account
+				browser.loginAccount(cloundUser, cloundPW);
+				// see if the folder exists
+				// browser.isFolderOnDB(droptilllatePath, shareRelationID);
+				// check if the passed email addresses are in a valid format and build the email list in the valid format
+				shareEmails = buildValidMailList(shareEmailList);
+				// share the folder to the passed users
+				browser.shareFolder(droptilllatePath, shareRelationID, shareEmails);
 
-		} catch (CloudException e)
-		{
-			System.err.println(e.getError());
+			} catch (CloudException e)
+			{
+				System.err.println(e.getError());
+				browser.quit();
+				return e.getError();
+			}
+			// TODO better delay handling
+			try
+			{
+				Thread.sleep(2000);
+			} catch (InterruptedException e)
+			{
+			}
+
 			browser.quit();
-			return e.getError();
-		}
-
-		// TODO better delay handling
-		try
-		{
-			Thread.sleep(2000);
-		} catch (InterruptedException e)
+		} catch (Exception e)
 		{
 		}
-
-		browser.quit();
 		Timer.stop(true);
 		return CloudError.NONE;
 	}
@@ -147,8 +158,8 @@ public class DropboxHandler implements ICloudProvider
 			if (alreadyShared)
 			{
 				// open the dropbox website via default browser for not yet shared folder
-				WebHelper
-						.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID + ConstantsDB.URL_RESHARE_PARMS);
+				WebHelper.openWebPage(ConstantsDB.BASIC_URL + "/" + droptilllatePath + "/" + shareRelationID
+						+ ConstantsDB.URL_RESHARE_PARMS);
 
 			} else
 			{
@@ -172,7 +183,12 @@ public class DropboxHandler implements ICloudProvider
 	 */
 	public void quitBrowser()
 	{
-		browser.quit();
+		try
+		{
+			browser.quit();
+		} catch (Exception e)
+		{
+		}
 	}
 
 	/**
